@@ -1,11 +1,11 @@
 {
-    "name": "mcp-server-commands",
-    "version": "0.5.0",
+    "name": "@darenft-labs/mcp-server-run-command",
+    "version": "1.0.0",
     "description": "An MCP server to run arbitrary commands",
     "private": false,
     "type": "module",
     "bin": {
-        "mcp-server-commands": "./build/index.js"
+        "mcp-server-run-command": "./build/index.js"
     },
     "files": [
         "build"

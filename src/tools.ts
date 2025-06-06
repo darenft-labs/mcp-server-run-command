@@ -42,6 +42,55 @@ export function reisterTools(server: Server) {
                         required: ["command"],
                     },
                 },
+                {
+                    name: "list_python_packages",
+                    description:
+                        "List installed python packages on this " + os.platform() + " machine",
+                    inputSchema: {
+                        type: "object",
+                        properties: {
+                            options: {
+                                type: "string",
+                                description: "options to pass to the 'pip list' command",
+                            },  
+                        },
+                        required: [],
+                    },
+                },
+                {
+                    name: "install_python_packages",
+                    description:
+                        "Install python packages on this " + os.platform() + " machine",
+                    inputSchema: {
+                        type: "object",
+                        properties: {
+                            packages: {
+                                type: "string",
+                                description: "packages to install, separated by space",
+                            },
+                        },
+                        required: ["packages"],
+                    },
+                },
+                {
+                    name: "run_python_script",
+                    description:
+                        "Run python script on this " + os.platform() + " machine",
+                    inputSchema: {
+                        type: "object",
+                        properties: {
+                            python_script: {
+                                type: "string",
+                                description: "python script to run",
+                            },
+                            workdir: {
+                                type: "string",
+                                description: "working directory",
+                            },
+                        },
+                        required: ["python_script", "workdir"],
+                    },
+                },
             ],
         };
     });
@@ -53,6 +102,25 @@ export function reisterTools(server: Server) {
             switch (request.params.name) {
                 case "run_command": {
                     return await runCommand(request.params.arguments);
+                }
+                case "list_python_packages": {
+                    const params = {
+                        command: "pip list",
+                    }
+                    return await runCommand(params);
+                }
+                case "install_python_packages": {
+                    const params = {
+                        command: "pip install " + request.params.arguments?.packages,
+                    }
+                    return await runCommand(params);
+                }
+                case "run_python_script": {
+                    const params = {
+                        command: "python " + request.params.arguments?.python_script,
+                        workdir: request.params.arguments?.workdir,
+                    }
+                    return await runCommand(params);
                 }
                 default:
                     throw new Error("Unknown tool");

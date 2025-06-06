@@ -16,9 +16,21 @@ Currently, just one command to rule them all!
 > Permissions are dictated by the user that runs the server.
 > DO NOT run with `sudo`.
 
-## Video walkthrough
+### Python Tools (Extends)
 
-<a href="https://youtu.be/0-VPu1Pc18w"><img src="https://img.youtube.com/vi/0-VPu1Pc18w/maxresdefault.jpg" width="480" alt="YouTube Thumbnail"></a>
+- `list_python_packages` - List installed Python packages
+  - Returns a list of installed Python packages with their versions
+  - Useful for checking what packages are available in the environment
+
+- `install_python_packages` - Install Python packages using pip
+  - Takes a list of package names to install (separate by space)
+  - Returns the installation output showing success/failure
+
+- `run_python_script` - Execute a Python script
+  - Takes Python file path as input and runs it
+  - Returns the script output (stdout/stderr)
+  - Can import installed packages and use Python standard library
+  - Useful for data processing, calculations, and automation tasks
 
 ## Prompts
 
@@ -54,14 +66,17 @@ Groq Desktop (beta, macOS) uses `~/Library/Application Support/groq-desktop-app/
 
 ### Use the published npm package
 
-Published to npm as [mcp-server-commands](https://www.npmjs.com/package/mcp-server-commands) using this [workflow](https://github.com/g0t4/mcp-server-commands/actions)
+Published to npm as [@darenft-labs/mcp-server-run-command](https://www.npmjs.com/package/@darenft-labs/mcp-server-run-command)
 
 ```json
 {
   "mcpServers": {
-    "mcp-server-commands": {
+    "mcp-server-run-commands": {
       "command": "npx",
-      "args": ["mcp-server-commands"]
+      "args": [
+        "-y",
+        "@darenft-labs/mcp-server-run-command"
+      ]
     }
   }
 }
@@ -74,9 +89,9 @@ Make sure to run `npm run build`
 ```json
 {
   "mcpServers": {
-    "mcp-server-commands": {
-      // works b/c of shebang in index.js
-      "command": "/path/to/mcp-server-commands/build/index.js"
+    "mcp-server-run-commands": {
+      "command": "node",
+      "args": ["/path/to/mcp-server-run-commands/build/index.js"]
     }
   }
 }
@@ -84,7 +99,7 @@ Make sure to run `npm run build`
 
 ### Logging
 
-Claude Desktop app writes logs to `~/Library/Logs/Claude/mcp-server-mcp-server-commands.log`
+Claude Desktop app writes logs to `~/Library/Logs/Claude/mcp-server-mcp-server-run-commands.log`
 
 By default, only important messages are logged (i.e. errors).
 If you want to see more messages, add `--verbose` to the `args` when configuring the server.
@@ -97,7 +112,7 @@ In the future, I expect well formatted log messages to be written over the `STDI
 Since MCP servers communicate over stdio, debugging can be challenging. We recommend using the [MCP Inspector](https://github.com/modelcontextprotocol/inspector), which is available as a package script:
 
 ```bash
-npm run inspector
+npx -y @modelcontextprotocol/inspector
 ```
 
 The Inspector will provide a URL to access debugging tools in your browser.
