@@ -5,7 +5,7 @@
     "private": false,
     "type": "module",
     "bin": {
-        "mcp-server-run-command": "./build/index.js"
+        "mcp-server-run-command": "build/index.js"
     },
     "files": [
         "build"
@@ -29,5 +29,25 @@
         "jest": "^29.7.0",
         "ts-jest": "^29.3.2",
         "typescript": "^5.8.3"
-    }
+    },
+    "main": "./build/index.js",
+    "directories": {
+        "test": "tests"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/darenft-labs/mcp-server-run-command.git"
+    },
+    "keywords": [
+        "mcp",
+        "server",
+        "run",
+        "command"
+    ],
+    "author": "annguyen-darenft",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/darenft-labs/mcp-server-run-command/issues"
+    },
+    "homepage": "https://github.com/darenft-labs/mcp-server-run-command#readme"
 }
