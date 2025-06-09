@@ -7,8 +7,9 @@ import {
 import { verbose_log } from "./always_log.js";
 import { runCommand } from "./run-command.js";
 import { Server } from "@modelcontextprotocol/sdk/server/index.js";
+import { PythonAlias } from "./exec-utils.js";
 
-export function reisterTools(server: Server) {
+export function registerTools(server: Server) {
     server.setRequestHandler(ListToolsRequestSchema, async () => {
         verbose_log("INFO: ListTools");
         return {
@@ -73,22 +74,22 @@ export function reisterTools(server: Server) {
                     },
                 },
                 {
-                    name: "run_python_script",
+                    name: "run_python_file",
                     description:
-                        "Run python script on this " + os.platform() + " machine",
+                        "Run python script file on this " + os.platform() + " machine",
                     inputSchema: {
                         type: "object",
                         properties: {
-                            python_script: {
+                            python_file: {
                                 type: "string",
-                                description: "python script to run",
+                                description: "python script file to run",
                             },
                             workdir: {
                                 type: "string",
                                 description: "working directory",
                             },
                         },
-                        required: ["python_script", "workdir"],
+                        required: ["python_file", "workdir"],
                     },
                 },
             ],
@@ -104,20 +105,38 @@ export function reisterTools(server: Server) {
                     return await runCommand(request.params.arguments);
                 }
                 case "list_python_packages": {
+                    if (PythonAlias === 'notfound') {
+                        return {
+                            isError: true,
+                            content: [{ type: "text", text: "Python is not installed or not in the system's PATH" }],
+                        }
+                    }
                     const params = {
-                        command: "pip list",
+                        command: `${PythonAlias} -m pip list`,
                     }
                     return await runCommand(params);
                 }
                 case "install_python_packages": {
+                    if (PythonAlias === 'notfound') {
+                        return {
+                            isError: true,
+                            content: [{ type: "text", text: "Python is not installed or not in the system's PATH" }],
+                        }
+                    }
                     const params = {
-                        command: "pip install " + request.params.arguments?.packages,
+                        command: `${PythonAlias} -m pip install ${request.params.arguments?.packages}`,
                     }
                     return await runCommand(params);
                 }
                 case "run_python_script": {
+                    if (PythonAlias === 'notfound') {
+                        return {
+                            isError: true,
+                            content: [{ type: "text", text: "Python is not installed or not in the system's PATH" }],
+                        }
+                    }
                     const params = {
-                        command: "python " + request.params.arguments?.python_script,
+                        command: `${PythonAlias} ` + request.params.arguments?.python_script,
                         workdir: request.params.arguments?.workdir,
                     }
                     return await runCommand(params);

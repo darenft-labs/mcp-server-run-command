@@ -75,4 +75,21 @@ async function fishWorkaround(
     });
 }
 
-export { execFileWithInput, ExecResult };
+let PythonAlias: string = 'notfound';
+const aliases = ['python', 'python3', 'py'];
+
+const checkPythonAlias = (index: number) => {
+    exec(`${aliases[index]} --version`, (error, stdout, stderr) => {
+        if (error) {
+            if (index < aliases.length - 1) {
+                checkPythonAlias(index+1);
+            }
+        } else {
+            PythonAlias = aliases[index];
+        }
+    });
+}
+checkPythonAlias(0);
+
+
+export { execFileWithInput, ExecResult, PythonAlias };

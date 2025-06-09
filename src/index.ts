@@ -6,12 +6,14 @@ import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js"
 
 import { createRequire } from "module";
 import { registerPrompts } from "./prompts.js";
-import { reisterTools } from "./tools.js";
+import { registerTools } from "./tools.js";
 const require = createRequire(import.meta.url);
 const {
     name: package_name,
     version: package_version,
 } = require("../package.json");
+
+let PythonSystemCheck = true;
 
 const server = new Server(
     {
@@ -28,7 +30,7 @@ const server = new Server(
         },
     }
 );
-reisterTools(server);
+registerTools(server);
 registerPrompts(server);
 
 async function main() {
