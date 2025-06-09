@@ -136,7 +136,7 @@ export function registerTools(server: Server) {
                         }
                     }
                     const params = {
-                        command: `${PythonAlias} ` + request.params.arguments?.python_script,
+                        command: `${PythonAlias} ` + request.params.arguments?.python_file,
                         workdir: request.params.arguments?.workdir,
                     }
                     return await runCommand(params);
