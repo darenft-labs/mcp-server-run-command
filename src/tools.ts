@@ -128,7 +128,7 @@ export function registerTools(server: Server) {
                     }
                     return await runCommand(params);
                 }
-                case "run_python_script": {
+                case "run_python_file": {
                     if (PythonAlias === 'notfound') {
                         return {
                             isError: true,
